@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bootstrap Webpage</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Recommendation for User</h1>
+    <br>
+    <div class="text">
+      <h4>Favorite Genre of UserID - {{user}} is <u><b><i>{{fav}}</i></b></u></h4>
+    </div>
+    <br>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Recommended Movies for this user</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for row in data%}
+        <tr>
+          <td>{{row['title']}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</body>
+</html>

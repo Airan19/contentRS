@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Input Form</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+	<div class="container mt-5">
+		<h2>Select query task</h2>
+		<form method="post" action={{url_for('display_files')}}>
+<!--			<div class="form-group">-->
+<!--				<label for="input1">Input 1:</label>-->
+<!--				<input type="text" class="form-control" id="input1" placeholder="Enter input 1">-->
+<!--			</div>-->
+			<div class="form-group">
+				<label for="input2">Input:</label>
+				<select name='query'  class="form-control" id="input2" required>
+					<option value="">-- Select an option --</option>
+					<option value="average/Total Count of Movies in each Genre">Can you tell me the Average Ratings of Each Genre ?</option>
+					<option value="totalCountMovies/Total Count of Movies in each Genre">Can you tell me the Total Count of Movies in Each Genre ?</option>
+					<option value="topGenreMostWatchedMovie/Top Genre of Most Watched Movies">Can you tell me the Top Genre of Most Watched Movies ?</option>
+					<option value="topUsers/Top User of each Genre with maximum views">Can you tell me the Top User of each Genre with maximum views ?</option>
+                    <option value="leastView/User with least views">Can you tell me the User with least views ?</option>
+                    <option value="topWatchedMovieEachGenre/Top Watched Movie of Each Genre">Can you tell me the Top Watched Movie of Each Genre ?</option>
+                    <option value="leastWatchedMovie/Least Watched Movies of each Genre">Can you tell me the Least Watched Movies of each ? <Genre></Genre></option>
+                    <option value="topRatedMovieEachGenre/Top Rated Movies of each Genre">Can you tell me the Top Rated Movies of each Genre ?</option>
+					<option value="leastRatedMovieEachGenre/Least Rated Movies of each Genre">Can you tell me the Least Rated Movies of each Genre ?</option>
+				</select>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<br>
+		or
+		<br>
+		<h3>Recommend movie for user</h3>
+		<form method="post" action={{url_for('recommendation')}}>
+			<div class="form-group">
+				<label for="userId">Enter UserID: (1-610)</label><br>
+				<input type="number" required name="userId" >
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<br>
+		or
+		<br>
+		<h3>Filter Query according to date</h3>
+		<form method="post" action={{url_for('datefilter')}}>
+			<div class="form-group">
+				<label for="filter">Filter</label>
+				<select name='filter' id="filter" required>
+					<option value="">-- Select an option --</option>
+					<option value="Top">Top</option>
+					<option value="Least"> Least</option>
+				</select>
+				<br>
+				<label for="criteria">Criteria</label>
+				<select name='criteria' id="criteria" required>
+					<option value="">-- Select an option --</option>
+					<option value="Watched">Watched Movie</option>
+					<option value="Rated"> Rated Movie</option>
+				</select>
+<!--				<br>-->
+<!--				<label for="typeOfQuery">Type</label>-->
+<!--				<select name='typeOfQuery'  id="typeOfQuery" required>-->
+<!--					<option value="">&#45;&#45; Select an option &#45;&#45;</option>-->
+<!--					<option value="Genre">Genre</option>-->
+<!--					<option value="Movie"> Movie</option>-->
+<!--				</select>-->
+
+				<br>
+				<label for="start-date">From (2005-01-01):</label>
+				<input type="date" id="start-date" name="start-date" min="2005-01-01" max="2020-09-31" value="2008-09-09">
+
+				<label for="end-date">To (2020-09-31):</label>
+				<input type="date" id="end-date" name="end-date" min="2005-01-01" max="2020-09-31" value="2019-05-23">
+
+				<script>
+				  var maxDate = new Date("2020-12-31"); // Set maximum date to December 31, 2020
+				  var minDate = new Date("2005-01-01");
+				  var startDateField = document.getElementById("start-date");
+				  var endDateField = document.getElementById("end-date");
+				  startDateField.addEventListener("input", function() {
+					var selectedDate = new Date(this.value);
+					if (minDate > selectedDate > maxDate) {
+					  this.value = ""; // Clear the input if the selected date is beyond the maximum or minimum
+					}
+				  });
+				  endDateField.addEventListener("input", function() {
+					var selectedDate = new Date(this.value);
+					if (minDate > selectedDate > maxDate) {
+					  this.value = ""; // Clear the input if the selected date is beyond the maximum or minimum
+					}
+				  });
+				</script>
+
+
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+		<br>
+
+	</div>
+
+<!--	 Bootstrap JS-->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
