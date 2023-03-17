@@ -30,6 +30,7 @@ container_name = 'raw/data'
 personal_access_token = 'dapi506245e280d4bb9c0d71c59687a78932'
 file_name_dict = {}
 
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -200,8 +201,10 @@ def datefilter():
     table = df.to_html(classes='table table-striped', index=False)
     return render_template('display.html', table=table, title=f"{filter} {criteria} Movie between {startDate} and {endDate}")
 
+
 def id_generator(size=32, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
