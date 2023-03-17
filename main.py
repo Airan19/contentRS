@@ -25,31 +25,21 @@ ALLOWED_EXTENSIONS = set(['parquet', 'json'])
 connect_str = "DefaultEndpointsProtocol=https;AccountName=f1datalakegen2;AccountKey=/Tq6QcK/D+PapopnlSSYOdRwt2YObLrLQMxR1WP6iN+9zCkweAYl/cX4FF0ko5OMLvFh/qHBpvA0+AStljssVw==;EndpointSuffix=core.windows.net"
 blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 container_name = "validated"
-
 # Define your Azure storage account and container information
-account_name = 'f1datalakegen2'
-account_key = '/Tq6QcK/D+PapopnlSSYOdRwt2YObLrLQMxR1WP6iN+9zCkweAYl/cX4FF0ko5OMLvFh/qHBpvA0+AStljssVw=='
 container_name = 'raw/data'
 personal_access_token = 'dapi506245e280d4bb9c0d71c59687a78932'
-account_url = f"https://{account_name}.blob.core.windows.net"
 
-# Initialize a BlobServiceClient object to interact with the Azure Blob Storage service
-blob_uri = f"https://{account_name}.blob.core.windows.net"
 
+file_name_dict = {}
 container_client = blob_service_client.get_container_client(container='validated')
 blob_list = container_client.list_blobs()
-
-file_name_dict = {
-"average" : "/output/average.csv/part-00000-tid-1234573884919535624-2bec834d-a17f-4546-b847-113c79ec7063-1861-1-c000.csv",
-"totalCountMovies" : "/output/totalCountMovies.csv/part-00000-tid-2286955346304826296-d82dd4aa-6bcc-4459-bc8a-f96fabf2db73-2187-1-c000.csv",
-"topGenreMostWatchedMovie" : "/output/topGenreMostWatchedMovie.csv/part-00000-tid-5156291253664288090-a9bb6f30-6dc9-4b97-8780-50f681559105-1417-1-c000.csv",
-"topUsers" : "/output/topUsers.csv/part-00000-tid-9062516593703483011-e7a66fc5-c4ab-4536-8e0a-d10b91469ae2-2475-1-c000.csv" ,
-"leastView" : "/output/leastView.csv/part-00000-tid-5420422514532730542-ede9c121-be16-40ad-86a8-6ca628f309aa-2761-1-c000.csv",
-"topWatchedMovieEachGenre" : "/output/topWatchedMovieEachGenre.csv/part-00000-tid-6370681123938897375-67dd1804-322b-401f-9b03-5b8dc5b4d61d-3049-1-c000.csv",
-"leastWatchedMovie" : "/output/leastWatchedMovie.csv/part-00000-tid-5350214237013151245-2228859a-6d7f-4b6f-81f9-8fdb2cb18a1f-3336-1-c000.csv",
-"topRatedMovieEachGenre" : "/output/topRatedMovieEachGenre.csv/part-00000-tid-4120065244775218531-33dd8d81-5c35-4451-887d-e3a25b1b5c3e-3531-1-c000.csv",
-"leastRatedMovieEachGenre" : "/output/leastRatedMovieEachGenre.csv/part-00000-tid-9005278412169055862-8a6d62a1-bdab-4d91-9bbd-6aa614d68462-3627-1-c000.csv"
-}
+for blob in blob_list:
+    if blob.name.startswith('output/'):
+        li = blob.name.split('/')
+        if file_name_dict.get(li[1]) is None:
+            file_name_dict[li[1]] = ''
+        else:
+            file_name_dict[li[1]] = li[2]
 
 
 def allowed_file(filename):
@@ -61,17 +51,11 @@ def allowed_file(filename):
 def display_files():
     if request.method == 'POST':
         value = request.form.get("query").split('/')
-        # Code to access file from blob storage
-        file_path = file_name_dict[value[0]]
-        blob_client = blob_service_client.get_blob_client(container='validated', blob=file_path)
-        # file_contents = blob_client.download_blob().content_as_text()
-        # Download the CSV data as bytes
+        blob_path = f"output/{value[0]}.csv/{file_name_dict.get(f'{value[0]}.csv')}"
+        blob_client = blob_service_client.get_blob_client('validated', blob_path)
         csv_data = blob_client.download_blob().content_as_bytes()
         df = pd.read_csv(io.BytesIO(csv_data))
         table = df.to_html(classes='table table-striped', index=False)
-
-        # read_csv = pd.read_csv(f'downloads/{value[0]}.csv', delimiter=',')  # or delimiter = ';'
-        # table = read_csv.to_html(classes='table table-striped', index=False)
         return render_template('display.html', table=table, title=value[1])
     return render_template('query.html')
 
@@ -81,7 +65,6 @@ def display_files():
 # def download_file():
 #     for blob in blob_list:
 #         if 'output/' in blob.name:
-#             print(blob)
 #             blob_name = blob.name.split('/')[1]
 #             blob_client = blob_service_client.get_blob_client(container='validated', blob=blob)
 #             with open(file= os.path.join('downloads',blob_name) , mode="wb") as sample_blob:
