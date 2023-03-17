@@ -28,19 +28,7 @@ container_name = "validated"
 # Define your Azure storage account and container information
 container_name = 'raw/data'
 personal_access_token = 'dapi506245e280d4bb9c0d71c59687a78932'
-
-
 file_name_dict = {}
-container_client = blob_service_client.get_container_client(container='validated')
-blob_list = container_client.list_blobs()
-for blob in blob_list:
-    if blob.name.startswith('output/'):
-        li = blob.name.split('/')
-        if file_name_dict.get(li[1]) is None:
-            file_name_dict[li[1]] = ''
-        else:
-            file_name_dict[li[1]] = li[2]
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -93,6 +81,22 @@ def upload_file():
 def running_status():
     time.sleep(300)
     return redirect(url_for('display_files'))
+
+
+@app.route('/file-update')
+def file_name_update():
+    container_client = blob_service_client.get_container_client(container='validated')
+    blob_list = container_client.list_blobs()
+    for blob in blob_list:
+        if blob.name.startswith('output/'):
+            li = blob.name.split('/')
+            if file_name_dict.get(li[1]) is None:
+                file_name_dict[li[1]] = ''
+            else:
+                file_name_dict[li[1]] = li[2]
+
+    return redirect(url_for('display_files'))
+
 
 @app.route('/recommendation', methods=['POST'])
 def recommendation():
@@ -200,4 +204,4 @@ def id_generator(size=32, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
