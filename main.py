@@ -89,9 +89,10 @@ def upload_file():
     return render_template('upload.html')
 
 
-@app.route('/running-status')
+@app.route('/running-process')
 def running_status():
-    return 'Processing Data'
+    time.sleep(300)
+    return redirect(url_for('display_files'))
 
 @app.route('/recommendation', methods=['POST'])
 def recommendation():
