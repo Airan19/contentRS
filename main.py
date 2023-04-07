@@ -22,12 +22,12 @@ if not os.path.isdir(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = set(['parquet', 'json'])
 
-connect_str = "DefaultEndpointsProtocol=https;AccountName=f1datalakegen2;AccountKey=/Tq6QcK/D+PapopnlSSYOdRwt2YObLrLQMxR1WP6iN+9zCkweAYl/cX4FF0ko5OMLvFh/qHBpvA0+AStljssVw==;EndpointSuffix=core.windows.net"
+connect_str = "***************************"
 blob_service_client = BlobServiceClient.from_connection_string(connect_str)
 container_name = "validated"
 # Define your Azure storage account and container information
 container_name = 'raw/data'
-personal_access_token = 'dapi506245e280d4bb9c0d71c59687a78932'
+personal_access_token = '***********************'
 file_name_dict = {}
 
 
@@ -103,9 +103,9 @@ def file_name_update():
 def recommendation():
     userId = int(request.form.get('userId'))
     function_call = '{}()'.format('recommend_movies')
-    job_id = 418950021701179
+    job_id = ********************
     # Set up the API endpoint and headers
-    api_endpoint = f'https://adb-1086592285570595.15.azuredatabricks.net/api/2.0/jobs/run-now'
+    api_endpoint = f'https://*********.azuredatabricks.net/api/2.0/jobs/run-now'
     headers = {'Authorization': f'Bearer {personal_access_token}', 'Content-Type': 'application/json'}
 
     # Define the API parameters
@@ -125,7 +125,7 @@ def recommendation():
     print(response.json()["run_id"])
 
     # Set up the API endpoint and headers
-    api_endpoint = 'https://adb-1086592285570595.15.azuredatabricks.net/api/2.0/jobs/runs/get'
+    api_endpoint = 'https://***************.azuredatabricks.net/api/2.0/jobs/runs/get'
     headers = {'Authorization': f'Bearer {personal_access_token}', 'Content-Type': 'application/json'}
 
     # Make the GET request to retrieve the job run details
@@ -137,7 +137,7 @@ def recommendation():
         time.sleep(10)
 
     # Define the Azure Databricks API endpoint and authentication token
-    api_endpoint = f'https://adb-1086592285570595.15.azuredatabricks.net/2.1/jobs/runs/get-output?run_id={run_id}'
+    api_endpoint = f'https://****************.azuredatabricks.net/2.1/jobs/runs/get-output?run_id={run_id}'
     api_token = personal_access_token
     # Create an instance of the Azure Databricks API client
     db = DatabricksAPI(host=api_endpoint, token=api_token)
@@ -157,7 +157,7 @@ def datefilter():
     print(startDate, endDate, filter, criteria)
     job_id = 156027196770425
     # Set up the API endpoint and headers
-    api_endpoint = f'https://adb-1086592285570595.15.azuredatabricks.net/api/2.0/jobs/run-now'
+    api_endpoint = f'https://***************.azuredatabricks.net/api/2.0/jobs/run-now'
     headers = {'Authorization': f'Bearer {personal_access_token}', 'Content-Type': 'application/json'}
 
     # Define the API parameters
@@ -175,7 +175,7 @@ def datefilter():
     response = requests.post(api_endpoint, headers=headers, data=json.dumps(data))
     run_id = response.json()["run_id"]
     # Set up the API endpoint and headers
-    api_endpoint = 'https://adb-1086592285570595.15.azuredatabricks.net/api/2.0/jobs/runs/get'
+    api_endpoint = 'https://*************************.azuredatabricks.net/api/2.0/jobs/runs/get'
     headers = {'Authorization': f'Bearer {personal_access_token}', 'Content-Type': 'application/json'}
 
     # Make the GET request to retrieve the job run details
@@ -189,7 +189,7 @@ def datefilter():
         time.sleep(10)
 
     # Define the Azure Databricks API endpoint and authentication token
-    api_endpoint = f'https://adb-1086592285570595.15.azuredatabricks.net/2.1/jobs/runs/get-output?run_id={run_id}'
+    api_endpoint = f'https://**********************************.azuredatabricks.net/2.1/jobs/runs/get-output?run_id={run_id}'
     api_token = personal_access_token
     # Create an instance of the Azure Databricks API client
     db = DatabricksAPI(host=api_endpoint, token=api_token)
